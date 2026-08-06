@@ -23,28 +23,175 @@ st.set_page_config(
 
 st.markdown("""
 <style>
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@400;600;800&display=swap');
 
-.main {
-    background-color: #0E1117;
+/* Base Styles */
+html, body, [class*="css"] {
+    font-family: 'Inter', sans-serif;
 }
 
-.metric-card {
-    background: #1E293B;
-    padding: 1rem;
-    border-radius: 12px;
+/* Main background with gradient */
+.stApp {
+    background: linear-gradient(135deg, #020617 0%, #0f172a 100%);
+    color: #f8fafc;
 }
 
+/* Headings with text gradients */
 h1 {
-    color: #38BDF8;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800 !important;
+    background: linear-gradient(90deg, #38BDF8, #818CF8, #C084FC);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem !important;
 }
 
 h2, h3 {
-    color: #60A5FA;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600 !important;
+    color: #e2e8f0 !important;
 }
 
-.stTabs [data-baseweb="tab"] {
-    font-size: 18px;
+/* File Uploader styling */
+[data-testid="stFileUploader"] {
+    background: rgba(30, 41, 59, 0.4);
+    border: 2px dashed rgba(56, 189, 248, 0.4);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(8px);
+}
+
+[data-testid="stFileUploader"]:hover {
+    border-color: #38bdf8;
+    background: rgba(30, 41, 59, 0.7);
+    transform: scale(1.01);
+}
+
+/* Metric Cards */
+[data-testid="stMetric"] {
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+[data-testid="stMetric"]:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px -8px rgba(56, 189, 248, 0.3);
+    border-color: rgba(56, 189, 248, 0.4);
+}
+
+[data-testid="stMetricLabel"] {
     font-weight: 600;
+    color: #94a3b8;
+}
+
+[data-testid="stMetricValue"] {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    color: #f8fafc;
+}
+
+/* DataFrame / Tables */
+[data-testid="stDataFrame"] {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Buttons */
+.stButton > button {
+    background: linear-gradient(90deg, #38BDF8, #818CF8);
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 0.5rem 1.5rem !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.stButton > button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 15px -3px rgba(56, 189, 248, 0.4) !important;
+    background: linear-gradient(90deg, #818CF8, #38BDF8) !important;
+}
+
+/* Download Button specific targeting */
+.stDownloadButton > button {
+    background: linear-gradient(90deg, #10b981, #059669);
+}
+
+.stDownloadButton > button:hover {
+    box-shadow: 0 8px 15px -3px rgba(16, 185, 129, 0.4) !important;
+    background: linear-gradient(90deg, #059669, #10b981) !important;
+}
+
+/* Text Area */
+.stTextArea textarea {
+    background-color: rgba(30, 41, 59, 0.6) !important;
+    color: #e2e8f0 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 12px !important;
+    font-family: 'Inter', monospace !important;
+}
+
+.stTextArea textarea:focus {
+    border-color: #38bdf8 !important;
+    box-shadow: 0 0 0 1px #38bdf8 !important;
+}
+
+/* Dividers */
+hr {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    margin: 2.5rem 0 !important;
+}
+
+/* Alerts / Success / Error / Warning Messages */
+[data-testid="stAlert"] {
+    border-radius: 12px;
+    border: none;
+    font-weight: 600;
+}
+
+/* Hide streamlit default branding */
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header {visibility: hidden;}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #0f172a; 
+}
+::-webkit-scrollbar-thumb {
+    background: #334155; 
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #475569; 
+}
+
+/* Image container */
+[data-testid="stImage"] {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.3s ease;
+}
+
+[data-testid="stImage"]:hover {
+    transform: scale(1.02);
 }
 
 </style>
