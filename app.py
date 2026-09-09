@@ -224,125 +224,125 @@ if uploaded_file:
         else:
             image_cv = image_np
 
-    gray, blurred, threshold = preprocess_image(image_cv)
+        gray, blurred, threshold = preprocess_image(image_cv)
 
-    text = extract_text(threshold)
-    text = clean_ocr_text(text)
+        text = extract_text(threshold)
+        text = clean_ocr_text(text)
 
-    data = get_text_data(threshold)
+        data = get_text_data(threshold)
 
-    confidence = calculate_average_confidence(data)
+        confidence = calculate_average_confidence(data)
 
-    info = extract_information(text)
+        info = extract_information(text)
 
-    boxed_image = draw_bounding_boxes(threshold)
+        boxed_image = draw_bounding_boxes(threshold)
 
-    st.divider()
+        st.divider()
 
-    col1, col2, col3, col4 = st.columns(4)
+        col1, col2, col3, col4 = st.columns(4)
 
-    with col1:
-        st.metric(
-            "OCR Confidence",
-            f"{confidence}%"
-        )
+        with col1:
+            st.metric(
+                "OCR Confidence",
+                f"{confidence}%"
+            )
 
-    with col2:
-        word_count = len(text.split())
-        st.metric(
-            "Words Detected",
-            word_count
-        )
-    with col3:
-        character_count = len(text)
-        st.metric(
-            "Characters",
-            character_count
-        )
+        with col2:
+            word_count = len(text.split())
+            st.metric(
+                "Words Detected",
+                word_count
+            )
+        with col3:
+            character_count = len(text)
+            st.metric(
+                "Characters",
+                character_count
+            )
 
-    with col4:
+        with col4:
 
-        if confidence >= 80:
-            st.success("🟢 High Accuracy")
+            if confidence >= 80:
+                st.success("🟢 High Accuracy")
 
-        elif confidence >= 60:
-            st.warning("🟡 Medium Accuracy")
+            elif confidence >= 60:
+                st.warning("🟡 Medium Accuracy")
 
-        else:
-            st.error("🔴 Low Accuracy")
+            else:
+                st.error("🔴 Low Accuracy")
 
-    st.divider()
+        st.divider()
 
-    st.subheader("Document Processing Pipeline")
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.markdown("### Original")
-        st.image(
-            image,
-            use_container_width=True
-        )
+        st.subheader("Document Processing Pipeline")
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.markdown("### Original")
+            st.image(
+                image,
+                use_container_width=True
+            )
 
-    with col2:
-        st.markdown("### Processed")
-        st.image(
-            threshold,
-            use_container_width=True
-        )
+        with col2:
+            st.markdown("### Processed")
+            st.image(
+                threshold,
+                use_container_width=True
+            )
 
-    with col3:
-        st.markdown("### Detection")
-        st.image(
-            boxed_image,
-            use_container_width=True
-        )
+        with col3:
+            st.markdown("### Detection")
+            st.image(
+                boxed_image,
+                use_container_width=True
+            )
 
     
-    st.divider()
+        st.divider()
 
-    st.subheader("Extracted Information")
+        st.subheader("Extracted Information")
 
-    df = pd.DataFrame(
-        list(info.items()),
-        columns=["Field", "Value"]
-    )
-
-    st.dataframe(
-        df,
-        use_container_width=True,
-        hide_index=True
-    )
-
-    st.divider()
-
-    st.subheader("OCR Extracted Text")
-
-    st.text_area(
-        "",
-        text,
-        height=250
-    )
-
-    st.divider()
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-
-        st.download_button(
-            label="⬇ Download TXT",
-            data=text,
-            file_name="ocr_output.txt",
-            mime="text/plain"
+        df = pd.DataFrame(
+            list(info.items()),
+            columns=["Field", "Value"]
         )
 
-    with col2:
-
-        csv_data = df.to_csv(
-            index=False
+        st.dataframe(
+            df,
+            use_container_width=True,
+            hide_index=True
         )
 
-        st.download_button(
-            label="⬇ Download CSV",
+        st.divider()
+
+        st.subheader("OCR Extracted Text")
+
+        st.text_area(
+            "",
+            text,
+            height=250
+        )
+
+        st.divider()
+
+        col1, col2 = st.columns(2)
+
+        with col1:
+
+            st.download_button(
+                label="⬇ Download TXT",
+                data=text,
+                file_name="ocr_output.txt",
+                mime="text/plain"
+            )
+
+        with col2:
+
+            csv_data = df.to_csv(
+                index=False
+            )
+
+            st.download_button(
+                label="⬇ Download CSV",
             data=csv_data,
             file_name="extracted_information.csv",
             mime="text/csv"
