@@ -209,17 +209,20 @@ uploaded_file = st.file_uploader(
 
 if uploaded_file:
 
-    image = Image.open(uploaded_file)
+    try:
+        image = Image.open(uploaded_file)
 
-    image_np = np.array(image)
+        image_np = np.array(image)
 
-    if len(image_np.shape) == 3:
-        image_cv = cv2.cvtColor(
-            image_np,
-            cv2.COLOR_RGB2BGR
-        )
-    else:
-        image_cv = image_np
+        if len(image_np.shape) == 3:
+            if image_np.shape[2] == 4:
+                image_cv = cv2.cvtColor(image_np, cv2.COLOR_RGBA2BGR)
+            else:
+                image_cv = cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR)
+        elif len(image_np.shape) == 2:
+            image_cv = cv2.cvtColor(image_np, cv2.COLOR_GRAY2BGR)
+        else:
+            image_cv = image_np
 
     gray, blurred, threshold = preprocess_image(image_cv)
 
@@ -344,3 +347,7 @@ if uploaded_file:
             file_name="extracted_information.csv",
             mime="text/csv"
         )
+
+    except Exception as e:
+        st.error(f"An error occurred during processing: {str(e)}")
+        st.exception(e)
